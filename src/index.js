@@ -1,56 +1,43 @@
-import React, {useState} from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState } from "react";
+import ReactDOM from "react-dom";
 
-//history render component to show the last plays state
-const History = (props) => {
-  if (props.allClicks.length === 0) {
-    return (
-      <div>
-        the app is used by pressing the butttons
-      </div>
-    )
+const Button = ({ clickHandle, text }) => {
+  return <button onClick={clickHandle}>{text}</button>;
+};
+
+const Stats = ({ good, neutral, bad }) => {
+  const all = good + neutral + bad;
+
+  if (all === 0) {
+    return <p>No feedback given</p>;
   }
 
   return (
     <div>
-      button press history: {props.allClicks.join(' ')}
+      <h3>Statistics</h3>
+      <p>good: {good}</p>
+      <p>neutral: {neutral}</p>
+      <p>bad: {bad}</p>
+      <p>all: {all}</p>
+      <p>average: </p>
     </div>
-  )
-}
+  );
+};
 
-//btn component
-const Button = ({onClick, text}) => (
-  <button onClick={onClick}> {text} </button>
-)
-
-const App = (props) => {
-  //states for left, right and all clicks used
-  const [left, setLeft] = useState(0)
-  const [right, setRight] = useState(0)
-  const [allClicks, setAll] = useState([])
-
-  //handlers for left/right click and update
-  const handleLeftClick = () => {
-    setAll(allClicks.concat('L'))
-    setLeft(left + 1)
-  }
-
-  const handleRightClick = () => {
-    setAll(allClicks.concat('R'))
-    setRight(right + 1)
-  }
+const App = () => {
+  //states
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
 
   return (
     <div>
-      <div>
-        {left}
-        <Button onClick={handleLeftClick} text="left" />
-        <Button onClick={handleRightClick} text="right" />
-        {right}
-        <History allClicks={allClicks}/>
-      </div>
+      <Button clickHandle={() => setGood(good + 1)} text="good" />
+      <Button clickHandle={() => setNeutral(neutral + 1)} text="neutral" />
+      <Button clickHandle={() => setBad(bad + 1)} text="bad" />
+      <Stats good={good} neutral={neutral} bad={bad} />
     </div>
-  )
-}
+  );
+};
 
-ReactDOM.render(<App />, document.querySelector('#root'))
+ReactDOM.render(<App />, document.querySelector("#root"));
