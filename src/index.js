@@ -16,18 +16,40 @@ const Button = ({ handleBtn, text }) => {
   return <button onClick={() => handleBtn()}>{text}</button>;
 };
 
+const TopAnedote = ({anecdotes, max}) => (
+  <div>
+    <h3>Anecdote with most votes</h3>
+    <p>{anecdotes[max]}</p>
+  </div>
+);
+
 const App = (props) => {
   const [selected, setSelected] = useState(0);
+  const [votes, setVote] = useState([0,0,0,0,0,0])
 
   const newQuote = () => {
     let index = rng()
     setSelected(index)
   }
 
+  const voteQuote = (index) => {
+    let newVotes = [...votes]
+    newVotes[index] += 1
+    setVote(newVotes)
+  }
+
+  const getTopAnedocte = () => {
+    let max = Math.max.apply(null,votes)
+    return votes.indexOf(max)
+  }
+
   return (
     <div>
       <p>{props.anecdotes[selected]}</p>
+      <p>this quote has {votes[selected]} votes</p>
+      <Button handleBtn={() => voteQuote(selected)} text={"vote"} />
       <Button handleBtn={newQuote} text="next anedocte" />
+      <TopAnedote anecdotes={anecdotes} max={getTopAnedocte()}/>
     </div>
   );
 };
