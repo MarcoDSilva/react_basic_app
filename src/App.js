@@ -3,13 +3,14 @@ import React, { useState } from "react";
 const App = () => {
   // array of people and method to update it
   const [persons, setPersons] = useState([
-    {
-      name: "Arto Hellas",
-      phone: "91999999999",
-    },
+    { name: "Arto Hellas", number: "91999999999" },
+    { name: "Ada Lovelace", number: "39-44-5323523" },
+    { name: "Dan Abramov", number: "12-43-234345" },
+    { name: "Mary Poppendieck", number: "39-23-6423122" },
   ]);
   const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
+  const [newFilter, setNewFilter] = useState("");
 
   //adding a new person to our state
   const addPerson = (e) => {
@@ -19,7 +20,7 @@ const App = () => {
     const resetForm = () => {
       setNewName("");
       setNewPhone("");
-    }
+    };
     // we try to find if this new name already exists
     const nameExists = persons.find((n) => n.name === newName);
 
@@ -41,19 +42,36 @@ const App = () => {
 
   // it gets the info from the input form
   const handleNameChange = (e) => {
-    console.log(e.target.value);
     setNewName(e.target.value);
   };
 
   const handlePhoneChange = (e) => {
-    console.log(e.target.value);
     setNewPhone(e.target.value);
+  };
+
+  // we update the filter input here
+  const handleFilter = (e) => {
+    setNewFilter(e.target.value.toLowerCase());
+  };
+
+  // we return the persons states conforming the filter state.
+  const filteredState = () => {
+    if (newFilter === "") {
+      return persons;
+    } else {
+      return persons.filter((a) => a.name.toLowerCase().includes(newFilter));
+    }
   };
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        filter shown with <input value={newFilter} onChange={handleFilter} />
+      </div>
+
       <form onSubmit={addPerson}>
+        <h2>Add a new</h2>
         <div>
           name: <input value={newName} onChange={handleNameChange} />
         </div>
@@ -64,14 +82,15 @@ const App = () => {
           <button type="submit">add</button>
         </div>
       </form>
+
       <h2>Numbers</h2>
-      <ul>
-        {persons.map((p) => (
-          <li key={p.name}>
-            {p.name} - {p.phone}
-          </li>
+      <section>
+        {filteredState().map((p) => (
+          <p key={p.name}>
+            {p.name} - {p.number}
+          </p>
         ))}
-      </ul>
+      </section>
     </div>
   );
 };
