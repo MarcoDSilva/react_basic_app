@@ -2,31 +2,41 @@ import React, { useState } from "react";
 
 const App = () => {
   // array of people and method to update it
-  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
-
+  const [persons, setPersons] = useState([
+    {
+      name: "Arto Hellas",
+      phone: "91999999999",
+    },
+  ]);
   const [newName, setNewName] = useState("");
+  const [newPhone, setNewPhone] = useState("");
 
-  //adding a name to the person arr state
-  const addName = (e) => {
+  //adding a new person to our state
+  const addPerson = (e) => {
     e.preventDefault();
     console.log("clicked the btn", e.target);
 
-    // we try to find if this new name already exists 
-    const nameExists = persons.find(n => n.name === newName)
+    const resetForm = () => {
+      setNewName("");
+      setNewPhone("");
+    }
+    // we try to find if this new name already exists
+    const nameExists = persons.find((n) => n.name === newName);
 
     // if the name exists, we alert the user and end this method
     if (nameExists) {
-      alert(`${newName} is already added to the phonebook`)
-      setNewName("");
+      alert(`${newName} is already added to the phonebook`);
+      resetForm();
       return;
     }
 
     const nameObj = {
       name: newName,
+      phone: newPhone,
     };
 
     setPersons(persons.concat(nameObj));
-    setNewName("");
+    resetForm();
   };
 
   // it gets the info from the input form
@@ -35,14 +45,20 @@ const App = () => {
     setNewName(e.target.value);
   };
 
+  const handlePhoneChange = (e) => {
+    console.log(e.target.value);
+    setNewPhone(e.target.value);
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addName}>
+      <form onSubmit={addPerson}>
         <div>
-          name: <input 
-            value={newName}
-            onChange={handleNameChange} />
+          name: <input value={newName} onChange={handleNameChange} />
+        </div>
+        <div>
+          number: <input value={newPhone} onChange={handlePhoneChange} />
         </div>
         <div>
           <button type="submit">add</button>
@@ -51,7 +67,9 @@ const App = () => {
       <h2>Numbers</h2>
       <ul>
         {persons.map((p) => (
-          <li key={p.name}>{p.name}</li>
+          <li key={p.name}>
+            {p.name} - {p.phone}
+          </li>
         ))}
       </ul>
     </div>
