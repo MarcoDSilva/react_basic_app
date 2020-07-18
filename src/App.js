@@ -1,5 +1,29 @@
 import React, { useState } from "react";
 
+const Filter = (props) => {
+
+}
+
+const PersonForm = (props) => {
+  return (
+    <form onSubmit={props.addPerson}>
+      <div>
+        name: <input value={props.personName} onChange={props.personOnChange} />
+      </div>
+      <div>
+        number: <input value={props.phoneNumber} onChange={props.phoneOnChange} />
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  );
+};
+
+const Persons = (props) => {
+
+}
+
 const App = () => {
   // array of people and method to update it
   const [persons, setPersons] = useState([
@@ -69,9 +93,14 @@ const App = () => {
       <div>
         filter shown with <input value={newFilter} onChange={handleFilter} />
       </div>
+      <h2>Add a new</h2>
 
-      <form onSubmit={addPerson}>
-        <h2>Add a new</h2>
+      <PersonForm onSubmit={addPerson} 
+          personName={newName} personOnChange={handleNameChange}
+          phoneNumber={newPhone} phoneOnChange={handlePhoneChange}
+      />
+
+      {/* <form onSubmit={addPerson}>      
         <div>
           name: <input value={newName} onChange={handleNameChange} />
         </div>
@@ -81,7 +110,7 @@ const App = () => {
         <div>
           <button type="submit">add</button>
         </div>
-      </form>
+      </form> */}
 
       <h2>Numbers</h2>
       <section>
