@@ -1,28 +1,7 @@
 import React, { useState } from "react";
-
-const Filter = (props) => {
-
-}
-
-const PersonForm = (props) => {
-  return (
-    <form onSubmit={props.addPerson}>
-      <div>
-        name: <input value={props.personName} onChange={props.personOnChange} />
-      </div>
-      <div>
-        number: <input value={props.phoneNumber} onChange={props.phoneOnChange} />
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
-  );
-};
-
-const Persons = (props) => {
-
-}
+import Filter from "./Components/Filter.js";
+import PersonForm from "./Components/PersonForm.js";
+import Persons from "./Components/Persons.js";
 
 const App = () => {
   // array of people and method to update it
@@ -36,15 +15,16 @@ const App = () => {
   const [newPhone, setNewPhone] = useState("");
   const [newFilter, setNewFilter] = useState("");
 
+  const resetForm = () => {
+    setNewName("");
+    setNewPhone("");
+  };
+
   //adding a new person to our state
   const addPerson = (e) => {
     e.preventDefault();
     console.log("clicked the btn", e.target);
-
-    const resetForm = () => {
-      setNewName("");
-      setNewPhone("");
-    };
+   
     // we try to find if this new name already exists
     const nameExists = persons.find((n) => n.name === newName);
 
@@ -57,7 +37,7 @@ const App = () => {
 
     const nameObj = {
       name: newName,
-      phone: newPhone,
+      number: newPhone,
     };
 
     setPersons(persons.concat(nameObj));
@@ -90,36 +70,19 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with <input value={newFilter} onChange={handleFilter} />
-      </div>
-      <h2>Add a new</h2>
+      <Filter newFilter={newFilter} handleFilter={handleFilter} />
 
-      <PersonForm onSubmit={addPerson} 
-          personName={newName} personOnChange={handleNameChange}
-          phoneNumber={newPhone} phoneOnChange={handlePhoneChange}
+      <h2>Add a new:</h2>
+      <PersonForm
+        addPerson={addPerson}
+        personName={newName}
+        personHandler={handleNameChange}
+        phoneNumber={newPhone}
+        phoneHandler={handlePhoneChange}
       />
 
-      {/* <form onSubmit={addPerson}>      
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newPhone} onChange={handlePhoneChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form> */}
-
-      <h2>Numbers</h2>
-      <section>
-        {filteredState().map((p) => (
-          <p key={p.name}>
-            {p.name} - {p.number}
-          </p>
-        ))}
-      </section>
+      <h2>Numbers:</h2>
+      <Persons person={persons} filter={filteredState} />
     </div>
   );
 };
