@@ -25,17 +25,26 @@ const App = () => {
       content: newNote,
       date: new Date().toISOString(),
       important: Math.random() > 0.5,
-      id: notes.length + 1,
     };
 
-    setNotes(notes.concat(noteObj));
-    setNewNote("");
+    // with post axios, we update the api in our localhost
+    // we also update the state right away to see the changes
+    axios
+      .post("http://localhost:3001/notes", noteObj)
+      .then((res) => {
+        setNotes(notes.concat(noteObj));
+        setNewNote("");
+      });
   };
 
   const handleNoteChange = (e) => {
     console.log(e.target.value);
     setNewNote(e.target.value);
   };
+
+  const toggleImportanceOf = (id) => {
+    console.log(`importance of ${id} needs to be toggled`)
+  }
 
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
 
@@ -48,7 +57,11 @@ const App = () => {
 
       <ul>
         {notesToShow.map((note) => (
-          <Note key={note.id} note={note} />
+          <Note 
+            key={note.id} 
+            note={note} 
+            toggleImportance={() => toggleImportanceOf(note.id)} 
+          />
         ))}
       </ul>
       
